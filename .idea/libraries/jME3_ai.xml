@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="jME3-ai">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/jME3-ai.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

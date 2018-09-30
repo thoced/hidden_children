@@ -1,0 +1,80 @@
+plugins {
+    id 'java'
+}
+
+group 'Boxo'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'application'
+apply plugin: 'java'
+apply plugin: 'maven'
+
+// replace resources folder to asset folder
+sourceSets {
+    main {
+        resources {
+            srcDirs= ["src/main/assets"]
+        }
+    }
+}
+
+// additional properties for native build 
+ext.applicationTitle = "jME example"
+ext.applicationVendor = "No vendor"
+ext.applicationMainClass = "com.jme.example.Starter"
+mainClassName = ext.applicationMainClass
+
+// define version of jME
+def jme3 = [v: '3.2.1-stable', g: 'org.jmonkeyengine']
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    jcenter()
+    maven { url "http://dl.bintray.com/jmonkeyengine/org.jmonkeyengine" }
+    maven { url "https://dl.bintray.com/stephengold/jme3utilities" }
+    maven { url "https://jitpack.io" }
+    mavenCentral()
+}
+
+dependencies {
+    compile "${jme3.g}:jme3-bullet-native:${jme3.v}"
+    compile "${jme3.g}:jme3-bullet:${jme3.v}"
+    compile "${jme3.g}:jme3-core:${jme3.v}"
+    compile "${jme3.g}:jme3-effects:${jme3.v}"
+    compile "${jme3.g}:jme3-terrain:${jme3.v}"
+    compile 'com.github.JavaSaBr:jmonkeybuilder-extension:2.1.1'
+    compile 'com.github.JavaSaBr:tonegodemitter:2.4.1'
+    compile 'jme3utilities:SkyControl:0.9.12'
+    runtime "${jme3.g}:jme3-desktop:${jme3.v}"
+    runtime "${jme3.g}:jme3-jogg:${jme3.v}"
+    runtime "${jme3.g}:jme3-lwjgl3:${jme3.v}"
+    runtime "${jme3.g}:jme3-plugins:${jme3.v}"
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+ant.importBuild('build-native.xml')
+ant.basedir = new File(buildDir.getParentFile(), "native-build")
+ant.properties.javaSourceVersion = sourceCompatibility
+ant.properties.javaTargetVersion = targetCompatibility
+ant.properties.applicationJarName = name + ".jar"
+ant.properties.applicationMainClass = ext.applicationMainClass
+ant.properties.applicationVendor = ext.applicationVendor
+ant.properties.applicationTitle = ext.applicationTitle
+ant.properties.applicationVersion = version
+
+// a task to prepare dependencies for native build
+task prepareDependencies(type: Copy) {
+
+    doFirst {
+        println("delete " + "$buildDir/dependencies")
+        GFileUtils.deleteDirectory(new File("$buildDir/dependencies"))
+    }
+
+    into "$buildDir/dependencies"
+    from configurations.runtime
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.6'
+}

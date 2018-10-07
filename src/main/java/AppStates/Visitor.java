@@ -1,6 +1,7 @@
 package AppStates;
 
 import Controllers.AgentCtrl;
+import Controllers.PlayerCtrl;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
@@ -44,6 +45,7 @@ public class Visitor implements SceneGraphVisitor {
     private Spatial NavMesh;
 
     private Spatial agent;
+    private Spatial player;
 
     private Node entity;
 
@@ -161,6 +163,27 @@ public class Visitor implements SceneGraphVisitor {
             }
         }
 
+        if(spatial.getName().equals("player")){
+            player = spatial;
+
+            RigidBodyControl rigidBodyControl = new RigidBodyControl(1f);
+            player.addControl(rigidBodyControl);
+            rigidBodyControl.setGravity(new Vector3f(0,-9.81f,0));
+            rigidBodyControl.setAngularFactor(new Vector3f(0,1,0));
+            rigidBodyControl.setDamping(0.95f,1f);
+            rigidBodyControl.setKinematic(false);
+            rigidBodyControl.setRestitution(0.1f);
+            CapsuleCollisionShape capsuleCollisionShape = new CapsuleCollisionShape(0.27f,0.4f,1);
+            rigidBodyControl.setCollisionShape(capsuleCollisionShape);
+            bulletAppState.getPhysicsSpace().add(rigidBodyControl);
+
+            // PlayerCtrl
+            PlayerCtrl playerCtrl = new PlayerCtrl(simpleApplication.getCamera());
+            player.addControl(playerCtrl);
+
+
+        }
+
 
 
 /*
@@ -231,7 +254,7 @@ public class Visitor implements SceneGraphVisitor {
         }
 */
         // debug
-        bulletAppState.setDebugEnabled(false);
+        bulletAppState.setDebugEnabled(true);
 
 
     }

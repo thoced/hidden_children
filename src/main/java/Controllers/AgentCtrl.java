@@ -4,6 +4,8 @@ import com.jme3.ai.navmesh.Path;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.animation.AnimEventListener;
+import com.jme3.bullet.collision.PhysicsCollisionEvent;
+import com.jme3.bullet.collision.PhysicsCollisionListener;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -20,7 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-public class AgentCtrl extends AbstractControl implements AnimEventListener {
+public class AgentCtrl extends AbstractControl implements AnimEventListener, PhysicsCollisionListener {
 
     private Path paths;
 
@@ -37,6 +39,9 @@ public class AgentCtrl extends AbstractControl implements AnimEventListener {
 
     private Spatial spatialAgent;
 
+    private Vector3f forceEvitement = new Vector3f(0,0,0);
+    private Vector3f vAgentToPoint = new Vector3f(0,0,0);
+
     @Override
     public void setSpatial(Spatial spatial) {
         super.setSpatial(spatial);
@@ -46,6 +51,9 @@ public class AgentCtrl extends AbstractControl implements AnimEventListener {
         control.addListener(this);
         channel = control.createChannel();
         channel.setAnim("CEDZOMBIE_IDLE");
+
+        RigidBodyControl rigidBodyControl = spatial.getControl(RigidBodyControl.class);
+        rigidBodyControl.getPhysicsSpace().addCollisionListener(this);
 
     }
 
@@ -89,11 +97,14 @@ public class AgentCtrl extends AbstractControl implements AnimEventListener {
 
         //rc.setPhysicsRotation(quaternion);
        // rc.clearForces();
-        rc.setLinearVelocity(diff.mult(SPEED));
 
+          Vector3f ortho = new Vector3f(1,1,1);
+          if(vAgentToPoint.length() > 0f)
+             ortho = vAgentToPoint.cross(Vector3f.UNIT_Y);
 
-
-
+          Vector3f force = (diff.mult(SPEED)).add(ortho);
+          rc.setLinearVelocity(force);
+          vAgentToPoint.set(0,0,0);
 
 
       }
@@ -156,6 +167,28 @@ public class AgentCtrl extends AbstractControl implements AnimEventListener {
     public void onAnimChange(AnimControl control, AnimChannel channel, String animName) {
 
         channel.setSpeed(0.8f);
+
+    }
+
+    @Override
+    public void collision(PhysicsCollisionEvent event) {
+
+
+
+        if(event.getNodeA().getName().equals("NodeGhost") && event.getNodeB().getName().equals("tree01")){
+            Vector3f contactPoint = event.getPositionWorldOnB();
+            vAgentToPoint = (contactPoint.subtract(spatialAgent.getWorldTranslation())).normalize();
+
+
+        }
+
+
+
+        if(event.getNodeB().getName().equals("NodeGhost") && event.getNodeA().getName().equals("tree01")) {
+            Vector3f contactPoint = event.getPositionWorldOnA();
+            vAgentToPoint = (contactPoint.subtract(spatialAgent.getWorldTranslation())).normalize();
+        }
+
 
     }
 }

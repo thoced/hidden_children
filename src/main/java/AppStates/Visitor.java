@@ -5,6 +5,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
+import com.jme3.bullet.collision.shapes.CylinderCollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.CharacterControl;
@@ -19,6 +20,7 @@ import com.jme3.light.PointLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.FogFilter;
 import com.jme3.post.ssao.SSAOFilter;
 import com.jme3.scene.LightNode;
 import com.jme3.scene.Node;
@@ -47,8 +49,7 @@ public class Visitor implements SceneGraphVisitor {
     private Node entity_bonhomme;
 
     private List<Node> nodesPositionNavMesh = new ArrayList<Node>();
-
-
+    private FogFilter fog;
 
 
     public Visitor(BulletAppState bulletAppState, SimpleApplication simpleApplication) {
@@ -77,6 +78,8 @@ public class Visitor implements SceneGraphVisitor {
             plsr.setLight(pl);
             simpleApplication.getViewPort().addProcessor(plsr);
 
+
+
         }
 
         if(spatial.getName().equals("navmesh")) {
@@ -95,8 +98,6 @@ public class Visitor implements SceneGraphVisitor {
 
         if(spatial.getName().equals("agent")){
             agent = spatial;
-            AgentCtrl agentCtrl = new AgentCtrl();
-            agent.addControl(agentCtrl);
 
             CapsuleCollisionShape capsuleCollisionShape = new CapsuleCollisionShape(0.27f,0.4f,1);
             RigidBodyControl rigidBodyControl = new RigidBodyControl(1f);
@@ -107,6 +108,22 @@ public class Visitor implements SceneGraphVisitor {
             rigidBodyControl.setDamping(0.95f,1f);
             agent.addControl(rigidBodyControl);
             bulletAppState.getPhysicsSpace().add(rigidBodyControl);
+
+            // ajout du control de mouvement
+            AgentCtrl agentCtrl = new AgentCtrl();
+            agent.addControl(agentCtrl);
+
+            // creation du GhostControl pour le système d'évitement
+            Node nodeChost = new Node("NodeGhost");
+            Spatial spatialAgent = ((Node)agent).getChild("spatialAgent");
+            ((Node)spatialAgent).attachChild(nodeChost);
+            nodeChost.move(0,20,40f);
+            // creation du ghostctrl
+            CapsuleCollisionShape capsuleGhost = new CapsuleCollisionShape(0.40f,0.4f,1);
+            GhostControl ghostControl = new GhostControl();
+            ghostControl.setCollisionShape(capsuleGhost);
+            nodeChost.addControl(ghostControl);
+            bulletAppState.getPhysicsSpace().add(ghostControl);
 
 
         }
@@ -122,6 +139,22 @@ public class Visitor implements SceneGraphVisitor {
                 rigidBodyControl.setGravity(Vector3f.ZERO);
                 CollisionShape shape = CollisionShapeFactory.createMeshShape(scene);
                 rigidBodyControl.setCollisionShape(shape);
+                bulletAppState.getPhysicsSpace().add(rigidBodyControl);
+            }
+        }
+
+
+        if(spatial.getName().equals("Trees")){
+            List<Spatial> listTrees = ((Node)spatial).getChildren();
+            for(Spatial tree : listTrees){
+                RigidBodyControl rigidBodyControl = new RigidBodyControl();
+                tree.addControl(rigidBodyControl);
+                rigidBodyControl.setMass(0f);
+                rigidBodyControl.setKinematic(true);
+                rigidBodyControl.setRestitution(0.9f);
+                rigidBodyControl.setGravity(Vector3f.ZERO);
+                CylinderCollisionShape cylinderCollisionShape = new CylinderCollisionShape(new Vector3f(0.32f,2,0.32f),1);
+                rigidBodyControl.setCollisionShape(cylinderCollisionShape);
                 bulletAppState.getPhysicsSpace().add(rigidBodyControl);
             }
         }
@@ -196,7 +229,7 @@ public class Visitor implements SceneGraphVisitor {
         }
 */
         // debug
-        bulletAppState.setDebugEnabled(false);
+        bulletAppState.setDebugEnabled(true);
 
 
     }

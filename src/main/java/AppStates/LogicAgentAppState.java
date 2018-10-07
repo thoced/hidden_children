@@ -7,6 +7,7 @@ import com.jme3.ai.navmesh.Path;
 import com.jme3.app.Application;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.bullet.BulletAppState;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -44,6 +45,8 @@ public class LogicAgentAppState extends AbstractAppState {
 
         }
 
+
+
     }
 
     @Override
@@ -55,7 +58,7 @@ public class LogicAgentAppState extends AbstractAppState {
             waitNode = 0f;
             // selection d'une position de node
             Random random = new Random();
-            int valueRandom = (int) getRandom(0,9);
+            int valueRandom = (int) getRandom(0,5);
             System.out.println("random: " + valueRandom);
             Node postionNavMesh = leve01States.getVisitor().getNodesPositionNavMesh().get(valueRandom);
 

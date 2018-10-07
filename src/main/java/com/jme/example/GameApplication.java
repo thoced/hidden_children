@@ -10,9 +10,12 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.material.TechniqueDef;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.SceneProcessor;
+import com.jme3.post.filters.FogFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Spatial;
 import com.ss.editor.extension.loader.SceneLoader;
@@ -27,6 +30,8 @@ public class GameApplication extends SimpleApplication {
      * The post filter processor.
      */
     protected FilterPostProcessor postProcessor;
+    private FogFilter fog;
+
 
     @Override
     public void simpleInitApp() {
@@ -43,7 +48,7 @@ public class GameApplication extends SimpleApplication {
         SceneLoader.install(this, postProcessor);
 
         final Camera camera = getCamera();
-        camera.setLocation(new Vector3f(99.50714F, 19.356062F, 44.070957F));
+        camera.setLocation(new Vector3f(20.50714F, 19.356062F, 0.070957F));
         camera.setRotation(new Quaternion(-0.042982846F, 0.90933293F, -0.09716145F, -0.40227568F));
 
         final FlyByCamera flyByCamera = getFlyByCamera();
@@ -64,6 +69,7 @@ public class GameApplication extends SimpleApplication {
 
         this.getStateManager().attach(new Leve01States());
         this.getStateManager().attach(new LogicAgentAppState());
+
 
 
     }

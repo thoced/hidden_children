@@ -2,6 +2,7 @@ package Controllers;
 
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.RenderManager;
@@ -15,8 +16,8 @@ public class PlayerCtrl extends AbstractControl {
 
     private Vector3f walkDirection = new Vector3f(0,0,0);
 
-    private Vector3f axeLeft = new Vector3f(0,0,0);
-    private Vector3f axeRight = new Vector3f(0,0,0);
+    private Vector2f axeLeft = new Vector2f(0,0);
+    private Vector2f axeRight = new Vector2f(0,0);
 
     private Vector3f force;
 
@@ -27,6 +28,8 @@ public class PlayerCtrl extends AbstractControl {
     private RigidBodyControl physic;
 
     private Camera camera;
+
+    private float SPEED = 6f;
 
     public PlayerCtrl(Camera camera) {
         this.camera = camera;
@@ -56,20 +59,23 @@ public class PlayerCtrl extends AbstractControl {
         Vector3f left = camera.getLeft();
 
         dir.normalizeLocal();
-        dir.multLocal(-axeLeft.z);
+        dir.multLocal(-axeLeft.y);
 
         left.normalizeLocal();
         left.multLocal(-axeLeft.x);
 
         dir.addLocal(left);
 
-        walkDirection = dir;
+        walkDirection = dir.mult(tpf * SPEED);
 
 
         Quaternion currentRot = headNode.getWorldRotation();
-        float angleY = currentRot.toAngleAxis(Vector3f.UNIT_Y);
-        angleY += axeRight.x;
-        currentRot.fromAngleAxis(angleY,Vector3f.UNIT_Y);
+        Quaternion rotRoll = new Quaternion();
+
+        rotRoll.fromAngleAxis(axeRight.x*tpf,Vector3f.UNIT_Y);
+      //  rotPitch.fromAngleAxis(axeRight.y*tpf, Vector3f.UNIT_Z);
+        currentRot.multLocal(rotRoll);
+       // currentRot.multLocal(rotPitch);
         headNode.setLocalRotation(currentRot);
 
         // walk
@@ -101,19 +107,19 @@ public class PlayerCtrl extends AbstractControl {
         this.viewDirection = viewDirection;
     }
 
-    public Vector3f getAxeLeft() {
+    public Vector2f getAxeLeft() {
         return axeLeft;
     }
 
-    public void setAxeLeft(Vector3f axeLeft) {
+    public void setAxeLeft(Vector2f axeLeft) {
         this.axeLeft = axeLeft;
     }
 
-    public Vector3f getAxeRight() {
+    public Vector2f getAxeRight() {
         return axeRight;
     }
 
-    public void setAxeRight(Vector3f axeRight) {
+    public void setAxeRight(Vector2f axeRight) {
         this.axeRight = axeRight;
     }
 }

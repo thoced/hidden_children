@@ -2,6 +2,7 @@ package com.jme.example;
 
 import com.jme3.input.RawInputListener;
 import com.jme3.input.event.*;
+import com.jme3.math.Vector2f;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.util.HashMap;
@@ -16,6 +17,8 @@ public class JoystickEventListener implements RawInputListener {
 
     private float JoyLeftX,JoyLeftY;
     private float JoyRightX,JoyRightY;
+    private Vector2f JoyAxeLeft = new Vector2f();
+    private Vector2f JoyAxeRight = new Vector2f();
 
     public JoystickEventListener() {
         mapping = new HashMap<>();
@@ -57,6 +60,14 @@ public class JoystickEventListener implements RawInputListener {
         return JoyRightY;
     }
 
+    public Vector2f getJoyAxeLeft() {
+        return JoyAxeLeft;
+    }
+
+    public Vector2f getJoyAxeRight() {
+        return JoyAxeRight;
+    }
+
     @Override
     public void beginInput() {
 
@@ -82,6 +93,9 @@ public class JoystickEventListener implements RawInputListener {
             case 3: JoyRightY = value;break;
 
         }
+
+        JoyAxeLeft.set(JoyLeftX,JoyLeftY);
+        JoyAxeRight.set(JoyRightX,JoyRightY);
     }
 
     @Override

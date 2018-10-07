@@ -76,8 +76,8 @@ public class Visitor implements SceneGraphVisitor {
             PointLightShadowRenderer plsr = new PointLightShadowRenderer(simpleApplication.getAssetManager(), SHADOWMAP_SIZE);
             plsr.setShadowIntensity(0.1f);
             plsr.setShadowZFadeLength(3f);
-            plsr.setShadowZExtend(128f);
-            plsr.setRenderBackFacesShadows(false);
+            plsr.setShadowZExtend(6f);
+            plsr.setRenderBackFacesShadows(true);
             plsr.setLight(pl);
             simpleApplication.getViewPort().addProcessor(plsr);
 
@@ -173,6 +173,7 @@ public class Visitor implements SceneGraphVisitor {
             rigidBodyControl.setDamping(0.95f,1f);
             rigidBodyControl.setKinematic(false);
             rigidBodyControl.setRestitution(0.1f);
+            rigidBodyControl.setFriction(0f);
             CapsuleCollisionShape capsuleCollisionShape = new CapsuleCollisionShape(0.27f,0.4f,1);
             rigidBodyControl.setCollisionShape(capsuleCollisionShape);
             bulletAppState.getPhysicsSpace().add(rigidBodyControl);
@@ -254,7 +255,7 @@ public class Visitor implements SceneGraphVisitor {
         }
 */
         // debug
-        bulletAppState.setDebugEnabled(true);
+        bulletAppState.setDebugEnabled(false);
 
 
     }
@@ -281,5 +282,9 @@ public class Visitor implements SceneGraphVisitor {
 
     public Spatial getAgent() {
         return agent;
+    }
+
+    public Spatial getPlayer() {
+        return player;
     }
 }

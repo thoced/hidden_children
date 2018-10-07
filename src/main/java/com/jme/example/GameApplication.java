@@ -50,6 +50,9 @@ public class GameApplication extends SimpleApplication {
         final Camera camera = getCamera();
         camera.setLocation(new Vector3f(20.50714F, 19.356062F, 0.070957F));
         camera.setRotation(new Quaternion(-0.042982846F, 0.90933293F, -0.09716145F, -0.40227568F));
+        camera.setFrustumPerspective(45f,this.settings.getWidth() / this.settings.getHeight(),0.1f,1000);
+
+
 
         final FlyByCamera flyByCamera = getFlyByCamera();
         flyByCamera.setMoveSpeed(8);

@@ -1,5 +1,6 @@
 package AppStates;
 
+import Controllers.PlayerCtrl;
 import com.jme.example.GameApplication;
 import com.jme.example.JoystickEventListener;
 import com.jme3.app.Application;
@@ -66,43 +67,8 @@ public class Leve01States extends AbstractAppState {
     public void update(float tpf) {
         super.update(tpf);
 
-        Vector3f forwardCam = simpleApp.getCamera().getDirection();
-        forwardCam.setY(0f);
-        forwardCam.normalizeLocal();
-        Vector3f leftCam = simpleApp.getCamera().getLeft();
-        leftCam.setY(0f);
-        leftCam.normalizeLocal();
-
-       /* RigidBodyControl rigidBodyControl =  visitor.getEntity_bonhomme().getControl(RigidBodyControl.class);
-
-
-
-        if(Math.abs(joystickEventListener.getJoyLeftX()) > 0.05f || Math.abs(joystickEventListener.getJoyLeftY()) > 0.05f  ) {
-
-            forwardCam.multLocal(-joystickEventListener.getJoyLeftY());
-            leftCam.multLocal(-joystickEventListener.getJoyLeftX());
-            Vector3f currentVelocity = rigidBodyControl.getLinearVelocity().clone();
-            currentVelocity.setX(0f);
-            currentVelocity.setZ(0f);
-            currentVelocity.addLocal((forwardCam.add(leftCam).mult(32f)));
-
-            rigidBodyControl.setLinearVelocity(currentVelocity);
-
-            Quaternion currentRot = rigidBodyControl.getPhysicsRotation();
-            Quaternion q = new Quaternion();
-            q.lookAt((forwardCam.add(leftCam)).normalize(),Vector3f.UNIT_Y);
-
-            Quaternion applyRot = q.slerp(currentRot,q,0.1f);
-
-            rigidBodyControl.setPhysicsRotation(applyRot);
-
-
-
-        }*/
-
-
-
-
+        visitor.getPlayer().getControl(PlayerCtrl.class).setAxeLeft(joystickEventListener.getJoyAxeLeft());
+        visitor.getPlayer().getControl(PlayerCtrl.class).setAxeRight(joystickEventListener.getJoyAxeRight().negate());
 
 
 

@@ -99,10 +99,15 @@ public class AgentCtrl extends AbstractControl implements AnimEventListener, Phy
        // rc.clearForces();
 
           Vector3f ortho = new Vector3f(1,1,1);
-          if(vAgentToPoint.length() > 0f)
-             ortho = vAgentToPoint.cross(Vector3f.UNIT_Y);
+          Vector3f force;
+          if(vAgentToPoint.length() > 0f) {
+              ortho = vAgentToPoint.cross(Vector3f.UNIT_Y);
+              ortho.projectLocal(diff);
+              force = (diff.add(ortho)).mult(SPEED);
+          }else
+              force = diff.mult(SPEED);
 
-          Vector3f force = (diff.mult(SPEED)).add(ortho);
+
           rc.setLinearVelocity(force);
           vAgentToPoint.set(0,0,0);
 

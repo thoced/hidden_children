@@ -22,6 +22,7 @@ import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FogFilter;
 import com.jme3.post.ssao.SSAOFilter;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.LightNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.SceneGraphVisitor;
@@ -147,6 +148,7 @@ public class Visitor implements SceneGraphVisitor {
         if(spatial.getName().equals("Trees")){
             List<Spatial> listTrees = ((Node)spatial).getChildren();
             for(Spatial tree : listTrees){
+                tree.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
                 RigidBodyControl rigidBodyControl = new RigidBodyControl();
                 tree.addControl(rigidBodyControl);
                 rigidBodyControl.setMass(0f);
@@ -229,7 +231,7 @@ public class Visitor implements SceneGraphVisitor {
         }
 */
         // debug
-        bulletAppState.setDebugEnabled(true);
+        bulletAppState.setDebugEnabled(false);
 
 
     }

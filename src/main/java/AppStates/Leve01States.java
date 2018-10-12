@@ -69,7 +69,7 @@ public class Leve01States extends AbstractAppState {
 
         visitor.getPlayer().getControl(PlayerCtrl.class).setAxeLeft(joystickEventListener.getJoyAxeLeft());
         visitor.getPlayer().getControl(PlayerCtrl.class).setAxeRight(joystickEventListener.getJoyAxeRight().negate());
-
+        visitor.getPlayer().getControl(PlayerCtrl.class).setHighPosition(!joystickEventListener.isButton00());
 
 
     }

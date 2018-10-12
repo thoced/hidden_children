@@ -1,6 +1,7 @@
 package AppStates;
 
 import Controllers.AgentCtrl;
+import com.jme3.ai.navmesh.Cell;
 import com.jme3.ai.navmesh.NavMesh;
 import com.jme3.ai.navmesh.NavMeshPathfinder;
 import com.jme3.ai.navmesh.Path;
@@ -41,8 +42,8 @@ public class LogicAgentAppState extends AbstractAppState {
             Spatial nodeMesh= visitor.getNavMesh();
 
           NavMesh navMesh = new NavMesh(((Geometry)nodeMesh).getMesh());
-           pathfinder = new NavMeshPathfinder(navMesh);
 
+          pathfinder = new NavMeshPathfinder(navMesh);
         }
 
 

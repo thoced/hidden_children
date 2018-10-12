@@ -35,7 +35,7 @@ public class GameApplication extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        renderManager.setPreferredLightMode(TechniqueDef.LightMode.SinglePass);
+        renderManager.setPreferredLightMode(TechniqueDef.LightMode.MultiPass);
         renderManager.setSinglePassLightBatchSize(5);
 
         postProcessor = new FilterPostProcessor(assetManager);

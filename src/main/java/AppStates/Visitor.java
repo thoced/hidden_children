@@ -102,7 +102,7 @@ public class Visitor implements SceneGraphVisitor {
         if(spatial.getName().equals("agent")){
             agent = spatial;
 
-            CapsuleCollisionShape capsuleCollisionShape = new CapsuleCollisionShape(0.27f,0.4f,1);
+            CapsuleCollisionShape capsuleCollisionShape = new CapsuleCollisionShape(0.32f,0.4f,1 );
             RigidBodyControl rigidBodyControl = new RigidBodyControl(1f);
             rigidBodyControl.setCollisionShape(capsuleCollisionShape);
             rigidBodyControl.setKinematic(false);
@@ -120,7 +120,7 @@ public class Visitor implements SceneGraphVisitor {
             Node nodeChost = new Node("NodeGhost");
             Spatial spatialAgent = ((Node)agent).getChild("spatialAgent");
             ((Node)spatialAgent).attachChild(nodeChost);
-            nodeChost.move(0,20,40f);
+            nodeChost.move(0,80,100f);
             // creation du ghostctrl
             CapsuleCollisionShape capsuleGhost = new CapsuleCollisionShape(0.40f,0.4f,1);
             GhostControl ghostControl = new GhostControl();

@@ -12,9 +12,9 @@ public class Starter extends Application {
     public static void main(final String[] args) {
 
         final AppSettings settings = new AppSettings(true);
-        settings.setResolution(1080  ,    768);
+        settings.setResolution(1920  ,    1080);
         settings.setVSync(true);
-        settings.setFullscreen(false);
+        settings.setFullscreen(true);
         settings.setGammaCorrection(true);
         settings.setRenderer(AppSettings.LWJGL_OPENGL45);
         settings.setFrameRate(90);

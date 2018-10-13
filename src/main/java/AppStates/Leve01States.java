@@ -36,7 +36,7 @@ public class Leve01States extends AbstractAppState {
         simpleApp = (SimpleApplication)app;
         manager = stateManager;
 
-        final Spatial scene = simpleApp.getAssetManager().loadModel("Scenes/zoneScene.j3s");
+        final Spatial scene = simpleApp.getAssetManager().loadModel("Scenes/zone03.j3s");
 
         simpleApp.getRootNode().attachChild(scene);
 

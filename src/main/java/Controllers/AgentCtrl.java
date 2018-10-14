@@ -30,7 +30,7 @@ public class AgentCtrl extends AbstractControl implements AnimEventListener, Phy
 
     private boolean isBusy = false;
 
-    private final float SPEED = 0.9f ;
+    private final float SPEED = 1.55f ;
 
     private Vector3f nextPos = null;
 
@@ -50,7 +50,7 @@ public class AgentCtrl extends AbstractControl implements AnimEventListener, Phy
         control = spatialAgent.getControl(AnimControl.class);
         control.addListener(this);
         channel = control.createChannel();
-        channel.setAnim("IDLE");
+        channel.setAnim("ALIEN_IDLE");
 
         RigidBodyControl rigidBodyControl = spatial.getControl(RigidBodyControl.class);
         rigidBodyControl.getPhysicsSpace().addCollisionListener(this);
@@ -145,7 +145,7 @@ public class AgentCtrl extends AbstractControl implements AnimEventListener, Phy
             fifo.add(waypoint.getPosition());
         }
         isBusy = true;
-        channel.setAnim("WALK");
+        channel.setAnim("ALIEN_RUN");
         channel.setSpeed(0.8f);
     }
 
@@ -160,11 +160,11 @@ public class AgentCtrl extends AbstractControl implements AnimEventListener, Phy
     @Override
     public void onAnimCycleDone(AnimControl control, AnimChannel channel, String animName) {
 
-        if(animName.equals("WALK") && !isBusy)
-            channel.setAnim("IDLE");
+        if(animName.equals("ALIEN_RUN") && !isBusy)
+            channel.setAnim("ALIEN_IDLE");
 
-        if(animName.equals("IDLE") && isBusy)
-            channel.setAnim("WALK");
+        if(animName.equals("ALIEN_IDLE") && isBusy)
+            channel.setAnim("ALIEN_RUN");
 
     }
 
